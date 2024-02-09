@@ -2,7 +2,51 @@
 
 {% block body %}
 
+
+{% if user.is_authenticated %}
 <h1> Clients </h1>
+
+<table class="table table-striped table-hover table-bordered">
+    <thead>
+        <tr class="table-dark">
+            <th scope="col">First Name</th>
+            <th scope="col">Last Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Address</th>
+            <th scope="col">City</th>
+            <th scope="col">Province</th>
+            <th scope="col">Created At</th>
+            <th scope="col">ID</th>
+        </tr>
+    </thead>
+    <tbody>
+
+{% if records %}
+    {% for record in records %}
+        <tr>
+            <td>{{ record.first_name }}</td>
+            <td>{{ record.last_name }}</td>
+            <td>{{ record.email }}</td>
+            <td>{{ record.address }}</td>
+            <td>{{ record.city }}</td>
+            <td>{{ record.province }}</td>
+            <td>{{ record.created_at }}</td>
+            <td><a href="{% url 'record' record.id %}">{{ record.id }}</a></td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% else %}
+
+<p> Currently no records to view</p>
+
+{% endif %}
+
+{% else %}
+<p> You must be logged in to view clients. </p>
+
+{% endif %}
 
 {% endblock %}
 
