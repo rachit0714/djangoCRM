@@ -36,6 +36,9 @@
     {% endfor %}
     </tbody>
 </table>
+{% if user.is_staff %}
+<a href="{% url 'add_client' %}" class="btn btn-primary">Add</a>
+{% endif %}
 
 {% else %}
 

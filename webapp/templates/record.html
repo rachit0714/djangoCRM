@@ -2,8 +2,23 @@
 
 {% block body %}
 
-<div class="col-md-6 offset-md-3">
-<h1>Client Record</h1>
-</br>
+<!--<div class="col-md-6 offset-md-3">-->
+<h1><strong>{{client.first_name}} {{client.last_name}} Record</strong></h1>
+
+<div class="card" style="width: 18rem;">
+    <div class="card-body">
+        <h3 class="card-title"><strong>{{client.first_name}} {{client.last_name}}</strong></h3>
+        <h4 class="card-subtitle mb-2 text-body-secondary"><strong>Client id: {{ client.id }}</strong></h4>
+        <p>
+            <strong>Email:</strong> {{ client.email }}</br>
+            <strong>Address:</strong> {{ client.address }} {{ client.city }}, {{ client.province }} </br>
+            <strong>Added:</strong> {{ client.created_at }}
+        </p>
+        <a href="{% url 'clients' %}" class="btn btn-primary">Back</a>
+        <a href="{% url 'update_client' client.id %}" class="btn btn-success">Update</a>
+        <a href="{% url 'delete_client' client.id %}" class="btn btn-danger">Delete</a>
+    </div>
+  </div>
+
 
 {% endblock %}

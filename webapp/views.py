@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from .forms import SignUpForm
+from .forms import SignUpForm, AddRecordForm
 from .models import Record
 
 # Create your views here.
@@ -62,3 +62,43 @@ def client_record(request, pk):
     else:
         messages.success(request, "You must be logged in to view that page.")
         return redirect('home')
+    
+def delete_client(request, pk):
+    if request.user.is_authenticated:
+        if request.user.is_staff:
+            rec_to_del = Record.objects.get(id=pk)
+            rec_to_del.delete()
+            messages.success(request, "Record has been successfully deleted")
+        else:
+            messages.success(request, "You must be a staff to delete a user")
+    else:
+        messages.success(request, "You must be staff logged in delete a client")
+    return redirect('clients')
+
+def add_client(request):
+    form = AddRecordForm(request.POST or None)
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            if form.is_valid():
+                add_record = form.save()
+                messages.success(request, "Record Added...")
+                return redirect("clients")
+        return render(request, 'add_client.html', {'form': form})
+    else:
+        messages.success(request, "You must be logged in")
+        return redirect('home')
+    
+def update_client(request, pk):
+    if request.user.is_authenticated:
+        current_record = Record.objects.get(id=pk)
+        form = AddRecordForm(request.POST or None, instance=current_record)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f"Record {pk} has been updated")
+            return redirect('clients')
+        return render(request, 'update_client.html', {'form': form, 'pk':pk})
+    else:
+        messages.success(request, "You must be logged in")
+        return redirect('home')
+
+
