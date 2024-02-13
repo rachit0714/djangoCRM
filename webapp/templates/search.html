@@ -1,0 +1,28 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+
+
+{% if search_input %}
+    <center><h1> Search results for {{ search_input }}: </h1></center>
+    {% if clients %}
+        <h2> Results from Client names </h2>
+        {% for client in clients %}
+            <a href="/clients/{{ client.id }}">{{ client }} - {{ client.id }}</a>
+            </br>
+        {% endfor %}
+    {% endif %}
+    {% if addresses %}
+        <h2> Results from Client addresses </h2>
+        {% for address in addresses %}
+            <a href="/clients/{{ address.id }}">{{ address.address }}, {{ address.city }}, {{ address.province }}</a>
+            </br>
+        {% endfor %}
+    {% endif %}
+
+    </br>
+{% else  %}
+    <center><h1> Enter something the search bar to search </h1></center>
+
+{% endif %}
+{% endblock %}

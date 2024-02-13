@@ -57,8 +57,12 @@ def get_clients(request):
 
 def client_record(request, pk):
     if request.user.is_authenticated:
-        client_record = Record.objects.get(id=pk)
-        return render(request, 'record.html', {'client': client_record})
+        try:
+            client_record = Record.objects.get(id=pk)
+            return render(request, 'record.html', {'client': client_record})
+        except:
+            messages.success(request, f"There is no client with id {pk}")
+            return redirect('clients')
     else:
         messages.success(request, "You must be logged in to view that page.")
         return redirect('home')
@@ -78,12 +82,16 @@ def delete_client(request, pk):
 def add_client(request):
     form = AddRecordForm(request.POST or None)
     if request.user.is_authenticated:
-        if request.method == "POST":
-            if form.is_valid():
-                add_record = form.save()
-                messages.success(request, "Record Added...")
-                return redirect("clients")
-        return render(request, 'add_client.html', {'form': form})
+        if request.user.is_staff:
+            if request.method == "POST":
+                if form.is_valid():
+                    add_record = form.save()
+                    messages.success(request, "Record Added...")
+                    return redirect("clients")
+            return render(request, 'add_client.html', {'form': form})
+        else:
+            messages.success(request, "You must be staff to add clients")
+            return redirect("clients")
     else:
         messages.success(request, "You must be logged in")
         return redirect('home')
@@ -101,4 +109,12 @@ def update_client(request, pk):
         messages.success(request, "You must be logged in")
         return redirect('home')
 
+def search(request):
+    if request.method == "POST":
+        input = request.POST['search_input']
+        clients_results = Record.objects.filter(first_name__contains=input) | Record.objects.filter(last_name__contains=input)
+        address_results = Record.objects.filter(address__contains=input) | Record.objects.filter(city__contains=input) | Record.objects.filter(province__contains=input)
+        return render(request, 'search.html', {'search_input': input, 'clients': clients_results, 'addresses': address_results})
+    else:
+        return render(request, 'search.html', {})
 

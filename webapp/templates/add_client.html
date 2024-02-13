@@ -1,7 +1,6 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-
 <h1> Add Client </h1>
 <form method="POST" action="{% url 'add_client' %}">
     {% csrf_token %}
@@ -9,5 +8,6 @@
 
     <button type="submit" class="btn btn-success">Add Record</button>
     <a class="btn btn-danger" href="{% url 'clients' %}">Cancel</a>
+
 </form>
 {% endblock %}
