@@ -15,7 +15,6 @@
             <th scope="col">Address</th>
             <th scope="col">City</th>
             <th scope="col">Province</th>
-            <th scope="col">Created At</th>
             <th scope="col">ID</th>
         </tr>
     </thead>
@@ -30,7 +29,6 @@
             <td>{{ record.address }}</td>
             <td>{{ record.city }}</td>
             <td>{{ record.province }}</td>
-            <td>{{ record.created_at }}</td>
             <td><a href="{% url 'record' record.id %}">{{ record.id }}</a></td>
         </tr>
     {% endfor %}
